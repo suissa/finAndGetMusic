@@ -1,12 +1,21 @@
 const fs = require(`fs`)
 const rp = require(`request-promise`)
-    // const mp3z = require(`./sensient`)
-
+const PATH = __dirname + '/musics'
 const find = process.argv.filter(el => !el.includes('/')).join('+')
 const page = `&page=0`
 const BASE = `http://slider.kz`
 const uri = `${BASE}/new/include/vk_auth.php?act=source1&q=${find}`
 
+const events = require('events')
+const eventEmitter = new events.EventEmitter()
+
+// const downloadedArr = []
+
+// const downloaded = (music) => {
+    
+// }
+
+// eventEmitter.on('downloaded', downloaded);  
 
 const ensureExists = (path, mask, cb) => {
     if (typeof mask == 'function') {
@@ -54,7 +63,7 @@ rp(getLinks)
                                     .on(`response`, res => console.log(`\n\t\t baixando ${el.tit_art} ... `))
                                     .on(`error`, (err) =>
                                         console.log(`MERDA AO BAIXAR DE: ${BASE}${el.url} \n`, el.tit_art))
-                                    .pipe(fs.createWriteStream(__dirname+'/'+el.tit_art+'/'+el.tit_art+'.mp3'))
+                                    .pipe(fs.createWriteStream(PATH+'/'+el.tit_art+'/'+el.tit_art+'.mp3'))
                                     .on( `finish`, () => {
                                         console.log(`\t\t\t Baixada: ${el.tit_art}.mp3`)
                                         // console.timeEnd('tempo para baixar TODAS as musicas')
@@ -77,11 +86,15 @@ rp(getLinks)
         // process.exit(1) 
         return listToSave
     })
-    .then(function(body) {
-        console.log(`\n\n\n\t\t SALVEI A PORRA TODA NO BANCO`, body)
+    .then( body => {
+        // console.log(`\n\n\n\t\t SALVEI A PORRA TODA NO BANCO`, body)
 
     })
-    .catch(function(err) {
+    .catch( err => {
         // API call failed... 
         console.log(`err`, err)
-    });
+    })
+    .finally( () => {
+        // API call failed... 
+        console.log(`Por hoje eh soh pesoal!`)
+    })
